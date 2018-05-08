@@ -351,6 +351,7 @@
     <Compile Include="Assets\Scripts\BlockControl.cs" />
     <Compile Include="Assets\Scripts\BlockRoot.cs" />
     <Compile Include="Assets\Scripts\MapControl.cs" />
+    <Compile Include="Assets\Scripts\SceneControl.cs" />
     <Compile Include="Assets\Standard Shader Gallery\Scripts\MaterialSample.cs" />
     <Compile Include="Assets\Standard Shader Gallery\Scripts\UIManager.cs" />
     <Compile Include="Assets\Unity Data Dome Package\Demo\DemoControls.cs" />
