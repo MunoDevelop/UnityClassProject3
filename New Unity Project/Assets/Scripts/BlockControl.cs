@@ -290,6 +290,7 @@ public class BlockControl : MonoBehaviour
         this.setColor(this.color);
         if (this.vanish_timer >= 0.0f)
         {
+            float vanish_time = this.block_root.level_control.getVanishTime();
             // 현재 색과 흰색의 중간 색.
             Color color0 = Color.Lerp(this.GetComponent<Renderer>().material.color,
             Color.white, 0.5f);
@@ -315,7 +316,11 @@ public class BlockControl : MonoBehaviour
     public void toVanishing()
     {
         // '사라질 때까지 걸리는 시간'을 규정값으로 리셋.
-        this.vanish_timer = Block.VANISH_TIME;
+        //this.vanish_timer = Block.VANISH_TIME;
+
+        float vanish_time = this.block_root.level_control.getVanishTime();
+        this.vanish_timer = vanish_time;
+
     }
     public bool isVanishing()
     {
@@ -326,7 +331,9 @@ public class BlockControl : MonoBehaviour
     public void rewindVanishTimer()
     {
         // '사라질 때까지 걸리는 시간'을 규정값으로 리셋.
-        this.vanish_timer = Block.VANISH_TIME;
+        //this.vanish_timer = Block.VANISH_TIME;
+        float vanish_time = this.block_root.level_control.getVanishTime();
+        this.vanish_timer = vanish_time;
     }
     public bool isVisible()
     {
@@ -438,9 +445,13 @@ public class BlockControl : MonoBehaviour
         this.position_offset.y =
         (float)(start_ipos_y - this.i_pos.y) * Block.COLLISION_SIZE;
         this.next_step = Block.STEP.FALL;
-        int color_index =
-        Random.Range((int)Block.COLOR.FIRST, (int)Block.COLOR.LAST + 1);
-        this.setColor((Block.COLOR)color_index);
+
+        //int color_index =
+        //Random.Range((int)Block.COLOR.FIRST, (int)Block.COLOR.LAST + 1);
+        //this.setColor((Block.COLOR)color_index);
+        Block.COLOR color = this.block_root.selectBlockColor();
+        this.setColor(color);
+
     }
     // 블록이 비표시(그리드상의 위치가 텅 빔)로 되어 있다면 true를 반환한다.
     public bool isVacant()

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class SceneControl : MonoBehaviour {
 
@@ -23,6 +24,7 @@ public class SceneControl : MonoBehaviour {
     void Start()
     {
         this.block_root = this.gameObject.GetComponent<BlockRoot>();
+        this.block_root.create();
         this.block_root.initialSetUp();
         // ScoreCounter 가져오기
         this.score_counter = this.gameObject.GetComponent<ScoreCounter>();
@@ -33,9 +35,20 @@ public class SceneControl : MonoBehaviour {
     void Update()
     {
         this.step_timer += Time.deltaTime;
+        switch (this.step)
+        {
+            case STEP.CLEAR:
+                if (Input.GetMouseButtonDown(0))
+                {
+                    SceneManager.LoadScene("TitleScene");
+                }
+                break;
+        }
         // 상태 변화 대기 -----.
         if (this.next_step == STEP.NONE)
         {
+
+
             switch (this.step)
             {
                 case STEP.PLAY:

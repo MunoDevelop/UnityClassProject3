@@ -354,6 +354,7 @@
     <Compile Include="Assets\Scripts\MapControl.cs" />
     <Compile Include="Assets\Scripts\SceneControl.cs" />
     <Compile Include="Assets\Scripts\ScoreCounter.cs" />
+    <Compile Include="Assets\Scripts\TitleScene.cs" />
     <Compile Include="Assets\Standard Shader Gallery\Scripts\MaterialSample.cs" />
     <Compile Include="Assets\Standard Shader Gallery\Scripts\UIManager.cs" />
     <Compile Include="Assets\Unity Data Dome Package\Demo\DemoControls.cs" />
@@ -403,6 +404,7 @@
     <None Include="Assets\PostProcessing\Resources\Shaders\Uber.shader" />
     <None Include="Assets\PostProcessing\Resources\Shaders\UberSecondPass.cginc" />
     <None Include="Assets\PostProcessing\Utilities\CustomMotionTexture\Shaders\CustomMotionVectorTexture.shader" />
+    <None Include="Assets\Scripts\level_data.txt" />
     <None Include="Assets\Standard Assets\Cameras\CameraGuidelines.txt" />
     <None Include="Assets\Standard Assets\CrossPlatformInput\CrossPlatformInputGuidelines.txt" />
     <None Include="Assets\Standard Assets\Effects\GlassRefraction\Shaders\GlassStainedBumpDistort.shader" />

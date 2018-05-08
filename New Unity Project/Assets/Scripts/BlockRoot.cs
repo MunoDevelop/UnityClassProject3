@@ -13,6 +13,42 @@ public class BlockRoot : MonoBehaviour
     private ScoreCounter score_counter = null; // 점수 카운터 ScoreCounter.
     protected bool is_vanishing_prev = false; // 앞에서 발화했는가?
 
+    public TextAsset levelData = null; // 레벨 데이터의 텍스트를 저장.
+    public LevelControl level_control; // LevelControl를 저장.
+
+    public void create()
+    {
+        this.level_control = new LevelControl();
+        this.level_control.initialize(); // 레벨 데이터 초기화.
+        this.level_control.loadLevelData(this.levelData); // 데이터 읽기.
+        this.level_control.selectLevel(); // 레벨 선택.
+    }
+
+   
+    public Block.COLOR selectBlockColor()
+    {
+        Block.COLOR color = Block.COLOR.FIRST;
+        // 이번 레벨의 레벨 데이터를 가져온다.
+        LevelData level_data = this.level_control.getCurrentLevelData();
+        float rand = Random.Range(0.0f, 1.0f); // 0.0~1.0 사이의 난수.
+        float sum = 0.0f; // 출현 확률의 합계.
+        int i = 0;
+        // 블록의 종류 전체를 처리하는 루프.
+        for (i = 0; i < level_data.probability.Length - 1; i++)
+        {
+            if (level_data.probability[i] == 0.0f)
+            {
+                continue; // 출현 확률이 0이면 루프의 처음으로 점프.
+            }
+            sum += level_data.probability[i]; // 출현 확률을 더한다.
+            if (rand < sum)
+            { // 합계가 난숫값을 웃돌면.
+                break; // 루프를 빠져나온다.
+            }
+        }
+        color = (Block.COLOR)i; // i번째 색을 반환한다.
+        return (color);
+    }
     void Start()
     {
         this.main_camera =
@@ -214,6 +250,8 @@ public class BlockRoot : MonoBehaviour
         new BlockControl[Block.BLOCK_NUM_X, Block.BLOCK_NUM_Y];
         // 블록의 색 번호.
         int color_index = 0;
+        Block.COLOR color = Block.COLOR.FIRST;
+
         for (int y = 0; y < Block.BLOCK_NUM_Y; y++)
         { // 처음~마지막행
             for (int x = 0; x < Block.BLOCK_NUM_X; x++)
@@ -236,8 +274,11 @@ public class BlockRoot : MonoBehaviour
                 // 씬의 블록 위치를 이동한다.
                 block.transform.position = position;
                 // 블록의 색을 변경한다.
-                block.setColor((Block.COLOR)color_index);
+                //block.setColor((Block.COLOR)color_index);
                 // 블록의 이름을 설정(후술)한다. 나중에 블록 정보 확인때 필요.
+                color = this.selectBlockColor();
+                block.setColor(color);
+
                 block.name = "block(" + block.i_pos.x.ToString() +
                 "," + block.i_pos.y.ToString() + ")";
                 // 전체 색 중에서 임의로 하나의 색을 선택한다.
