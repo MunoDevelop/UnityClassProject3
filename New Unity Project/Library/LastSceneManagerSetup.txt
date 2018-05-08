@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/ee.unity
+- path: Assets/Unity Data Dome Package/Demo.unity
   isLoaded: 1
   isActive: 1
