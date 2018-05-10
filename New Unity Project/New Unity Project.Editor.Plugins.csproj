@@ -259,21 +259,6 @@
     <Reference Include="SyntaxTree.VisualStudio.Unity.Bridge">
       <HintPath>C:/Program Files (x86)/Microsoft Visual Studio Tools for Unity/15.0/Editor/SyntaxTree.VisualStudio.Unity.Bridge.dll</HintPath>
     </Reference>
-    <Reference Include="DOTween">
-      <HintPath>Assets/Standard Shader Gallery/Demigiant/DOTween/DOTween.dll</HintPath>
-    </Reference>
-    <Reference Include="DOTween43">
-      <HintPath>Assets/Standard Shader Gallery/Demigiant/DOTween/DOTween43.dll</HintPath>
-    </Reference>
-    <Reference Include="DOTween46">
-      <HintPath>Assets/Standard Shader Gallery/Demigiant/DOTween/DOTween46.dll</HintPath>
-    </Reference>
-    <Reference Include="DOTween50">
-      <HintPath>Assets/Standard Shader Gallery/Demigiant/DOTween/DOTween50.dll</HintPath>
-    </Reference>
-    <Reference Include="DOTweenEditor">
-      <HintPath>Assets/Standard Shader Gallery/Demigiant/DOTween/Editor/DOTweenEditor.dll</HintPath>
-    </Reference>
     <Reference Include="UnityEngine.Advertisements">
       <HintPath>C:/Users/huozi/AppData/LocalLow/Unity/cache/packages/packages.unity.com/com.unity.ads@2.0.3/UnityEngine.Advertisements.dll</HintPath>
     </Reference>
@@ -361,15 +346,6 @@
     <None Include="Assets\Standard Assets\Effects\ToonShading\Shaders\ToonBasicOutline.shader" />
     <None Include="Assets\Standard Assets\Effects\ToonShading\Shaders\ToonLit.shader" />
     <None Include="Assets\Standard Assets\Effects\ToonShading\Shaders\ToonLitOutline.shader" />
-    <None Include="Assets\Standard Shader Gallery\Demigiant\DOTween\DOTween.XML" />
-    <None Include="Assets\Standard Shader Gallery\Demigiant\DOTween\DOTween43.xml" />
-    <None Include="Assets\Standard Shader Gallery\Demigiant\DOTween\DOTween46.xml" />
-    <None Include="Assets\Standard Shader Gallery\Demigiant\DOTween\DOTween50.xml" />
-    <None Include="Assets\Standard Shader Gallery\Demigiant\DOTween\Editor\DOTweenEditor.XML" />
-    <None Include="Assets\Standard Shader Gallery\Demigiant\DOTween\readme.txt" />
-    <None Include="Assets\Standard Shader Gallery\Readme.txt" />
-    <None Include="Assets\Standard Shader Gallery\Shaders\PBR_Refraction.shader" />
-    <None Include="Assets\Standard Shader Gallery\Shaders\TiltShiftHdrLensBlur.shader" />
     <None Include="Assets\Unity Data Dome Package\DomeProjection\Resources\DomeProjection.shader" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

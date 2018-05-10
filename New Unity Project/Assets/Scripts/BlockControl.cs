@@ -37,9 +37,9 @@ public class Block
         DOWN, // 하.
         NUM, // 방향이 몇 종류 있는지 나타낸다(=4).
     };
-    public static int BLOCK_NUM_X = 9;
+    public static int BLOCK_NUM_X = 15;
     // 블록을 배치할 수 있는 X방향 최대수.
-    public static int BLOCK_NUM_Y = 9;
+    public static int BLOCK_NUM_Y = 15;
     // 블록을 배치할 수 있는 Y방향 최대수.
 
     public enum STEP
@@ -61,6 +61,14 @@ public class Block
 // 블록을 조작하는 클래스이다.
 public class BlockControl : MonoBehaviour
 {
+    public Material pink;
+    public Material blue;
+    public Material yellow;
+    public Material green;
+    public Material magenta;
+    public Material orange;
+    //public Material orange;
+
     private struct StepFall
     { // Block class가 아님
         public float velocity; // 낙하 속도.
@@ -152,8 +160,9 @@ public class BlockControl : MonoBehaviour
 
     void Start()
     {
-        this.setColor(this.color);
+        //this.setColor(this.color);
         this.next_step = Block.STEP.IDLE; // 다음 블록을 대기중으로.
+        block_root = GameObject.Find("GameRoot").GetComponent<BlockRoot>();
     }
     void Update()
     {
@@ -226,7 +235,7 @@ public class BlockControl : MonoBehaviour
                 case Block.STEP.IDLE: // '대기' 상태.
                     this.position_offset = Vector3.zero;
                     // 블록 표시 크기를 보통 크기로 한다.
-                    this.transform.localScale = Vector3.one * 1.0f;
+                    this.transform.localScale = Vector3.one * 1f;
                     break;
                 case Block.STEP.GRABBED: // '잡힌' 상태.
                                          // 블록 표시 크기를 크게 한다.
@@ -235,7 +244,7 @@ public class BlockControl : MonoBehaviour
                 case Block.STEP.RELEASED: // '떨어져 있는' 상태.
                     this.position_offset = Vector3.zero;
                     // 블록 표시 크기를 보통 사이즈로 한다.
-                    this.transform.localScale = Vector3.one * 1.0f;
+                    this.transform.localScale = Vector3.one * 1f;
                     break;
                 case Block.STEP.VACANT:
                     this.position_offset = Vector3.zero;
@@ -287,29 +296,54 @@ public class BlockControl : MonoBehaviour
         BlockRoot.calcBlockPosition(this.i_pos) + this.position_offset;
         // 실제 위치를 새로운 위치로 변경한다.
         this.transform.position = position;
+
+
         this.setColor(this.color);
+
+       
+
         if (this.vanish_timer >= 0.0f)
         {
-            float vanish_time = this.block_root.level_control.getVanishTime();
-            // 현재 색과 흰색의 중간 색.
-            Color color0 = Color.Lerp(this.GetComponent<Renderer>().material.color,
-            Color.white, 0.5f);
-            // 현재 색과 검은색의 중간 색.
-            Color color1 = Color.Lerp(this.GetComponent<Renderer>().material.color,
-            Color.black, 0.5f);
-            // 불붙는 연출 시간이 절반을 지났다면.
-            if (this.vanish_timer < Block.VANISH_TIME / 2.0f)
-            {
-                // 투명도(a)를 설정.
-                color0.a = this.vanish_timer / (Block.VANISH_TIME / 2.0f);
-                color1.a = color0.a;
-                // 반투명 머티리얼을 적용.
-                this.GetComponent<Renderer>().material = this.transparent_material;
-            }
-            // vanish_timer가 줄어들수록 1에 가까워진다.
-            float rate = 1.0f - this.vanish_timer / Block.VANISH_TIME;
-            // 서서히 색을 바꾼다.
-            this.GetComponent<Renderer>().material.color = Color.Lerp(color0, color1, rate);
+           
+          float vanish_time = this.block_root.level_control.getVanishTime();
+          if (vanish_time != 0)
+          {
+              float vanishRate = vanish_timer / vanish_time;
+
+                Color baseColor = this.setColor(this.color);
+
+
+              Color finalColor = baseColor * Mathf.LinearToGammaSpace(vanishRate *4);
+              this.GetComponent<Renderer>().material.EnableKeyword("_EMISSION");
+              this.GetComponent<Renderer>().materials[0].SetColor("_EmissionColor", finalColor);
+              //DynamicGI.SetEmissive(GetComponent<Renderer>(), finalColor);
+          }
+            
+
+
+           
+                //Mathf.LinearToGammaSpace(vanishRate*5);
+
+         // 
+         // // 현재 색과 흰색의 중간 색.
+         // Color color0 = Color.Lerp(this.GetComponent<Renderer>().material.color,
+         // Color.white, 0.5f);
+         // // 현재 색과 검은색의 중간 색.
+         // Color color1 = Color.Lerp(this.GetComponent<Renderer>().material.color,
+         // Color.black, 0.5f);
+         // // 불붙는 연출 시간이 절반을 지났다면.
+         // if (this.vanish_timer < Block.VANISH_TIME / 2.0f)
+         // {
+         //     // 투명도(a)를 설정.
+         //     color0.a = this.vanish_timer / (Block.VANISH_TIME / 2.0f);
+         //     color1.a = color0.a;
+         //     // 반투명 머티리얼을 적용.
+         //     this.GetComponent<Renderer>().material = this.transparent_material;
+         // }
+         // // vanish_timer가 줄어들수록 1에 가까워진다.
+         // float rate = 1.0f - this.vanish_timer / Block.VANISH_TIME;
+         // // 서서히 색을 바꾼다.
+         // this.GetComponent<Renderer>().material.color = Color.Lerp(color0, color1, rate);
         }
     }
 
@@ -320,7 +354,7 @@ public class BlockControl : MonoBehaviour
 
         float vanish_time = this.block_root.level_control.getVanishTime();
         this.vanish_timer = vanish_time;
-
+        //Debug.Log(vanish_time);
     }
     public bool isVanishing()
     {
@@ -367,6 +401,10 @@ public class BlockControl : MonoBehaviour
     }
     public bool isGrabbable() // 잡을 수 있는 상태 인지 판단한다.
     {
+        if (this.vanish_timer>=0)
+        {
+            return false;
+        }
         bool is_grabbable = false;
         switch (this.step)
         {
@@ -374,6 +412,7 @@ public class BlockControl : MonoBehaviour
                 is_grabbable = true; // true(잡을 수 있다)를 반환한다.
                 break;
         }
+      //  Debug.Log(this.step);
         return (is_grabbable);
     }
     public bool isContainedPosition(Vector2 position)
@@ -401,34 +440,52 @@ public class BlockControl : MonoBehaviour
 
 
     // 인수 color의 색으로 블록을 칠한다.
-    public void setColor(Block.COLOR color)
+    public Color setColor(Block.COLOR color)
     {
         this.color = color; // 이번에 지정된 색을 멤버 변수에 보관한다.
         Color color_value; // Color 클래스는 색을 나타낸다.
+        Material mat = yellow;
         switch (this.color)
         { // 칠할 색에 따라서 갈라진다.
             default:
             case Block.COLOR.PINK:
                 color_value = new Color(1.0f, 0.5f, 0.5f);
+                mat = pink;
                 break;
             case Block.COLOR.BLUE:
                 color_value = Color.blue;
+                mat = blue;
                 break;
             case Block.COLOR.YELLOW:
                 color_value = Color.yellow;
+                mat = yellow;
                 break;
             case Block.COLOR.GREEN:
                 color_value = Color.green;
+                mat = green;
                 break;
             case Block.COLOR.MAGENTA:
                 color_value = Color.magenta;
+                mat = magenta;
                 break;
             case Block.COLOR.ORANGE:
                 color_value = new Color(1.0f, 0.46f, 0.0f);
+                mat = orange;
                 break;
         }
         // 이 게임 오브젝트의 머티리얼 색상을 변경한다.
-        this.GetComponent<Renderer>().material.color = color_value;
+        this.GetComponent<Renderer>().materials[0].color = color_value;
+        //this.GetComponent<Renderer>().material = mat;
+        this.GetComponent<Renderer>().materials[0].SetColor("_EmissionColor", color_value);
+
+        if (this.vanish_timer<0)
+        {
+            this.GetComponent<Renderer>().material.DisableKeyword("_EMISSION");
+        }
+       
+
+        return color_value;
+        //
     }
 
     public void beginFall(BlockControl start)

@@ -79,6 +79,7 @@ public class BlockRoot : MonoBehaviour
                 {
                     if (!block.isGrabbable())
                         { // 블록을 잡을 수 없다면.ignite_count
+                          //  Debug.Log("not ");
                             continue; // 루프의 처음으로 점프한다.
                     } // 마우스 위치가 블록 영역 안이 아니면.
                     if (!block.isContainedPosition(mouse_position_xy))
@@ -109,6 +110,7 @@ public class BlockRoot : MonoBehaviour
                 // 슬라이드할 곳의 블록이 잡을 수 있는 상태가 아니라면.
                 if (!swap_target.isGrabbable())
                 {
+                   // Debug.Log("not ");
                     break; // 루프 탈출.
                 }
                 // 현재 위치에서 슬라이드 위치까지의 거리를 얻는다.
@@ -245,7 +247,7 @@ public class BlockRoot : MonoBehaviour
     // 블록을 만들어 내고 가로 9칸, 세로 9칸에 배치한다.
     public void initialSetUp()
     {
-        // 그리드의 크기를 9×9로 한다.
+        // 그리드의 크기  
         this.blocks =
         new BlockControl[Block.BLOCK_NUM_X, Block.BLOCK_NUM_Y];
         // 블록의 색 번호.
@@ -262,6 +264,8 @@ public class BlockRoot : MonoBehaviour
                 // 위에서 만든 블록의 BlockControl 클래스를 가져온다.
                 BlockControl block =
                 game_object.GetComponent<BlockControl>();
+               // game_object.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
+               // Debug.Log(game_object.transform.localScale);
                 // 블록을 그리드에 저장한다.
                 this.blocks[x, y] = block;
                 // 블록의 위치 정보(그리드 좌표)를 설정한다.
@@ -566,6 +570,59 @@ for (int y = uy + 1; y < Block.BLOCK_NUM_Y; y ++)
                 ret = true;
             }
         } while (false);
+
+        if (start.vanish_timer<0)
+     {
+
+        
+
+        if ((start.i_pos.y+2 > Block.BLOCK_NUM_Y)|| (start.i_pos.y - 1 < 0))
+        {
+            return (ret);
+        }
+        if ((start.i_pos.x + 2 > Block.BLOCK_NUM_X ) || (start.i_pos.x - 1 < 0))
+        {
+            return (ret);
+        }
+       
+        BlockControl leftTop = this.blocks[start.i_pos.x-1, start.i_pos.y-1];
+
+        BlockControl rightBottom = this.blocks[start.i_pos.x +1, start.i_pos.y +1];
+
+        if ((leftTop.color == start.color) && (start.color == rightBottom.color))
+        {
+            leftTop.toVanishing();
+            start.toVanishing();
+            rightBottom.toVanishing();
+        }
+     }
+
+        if (start.vanish_timer < 0)
+        {
+
+
+
+            if ((start.i_pos.y + 2 > Block.BLOCK_NUM_Y) || (start.i_pos.y - 1 < 0))
+            {
+                return (ret);
+            }
+            if ((start.i_pos.x + 2 > Block.BLOCK_NUM_X) || (start.i_pos.x - 1 < 0))
+            {
+                return (ret);
+            }
+
+            BlockControl leftBottom = this.blocks[start.i_pos.x - 1, start.i_pos.y + 1];
+
+            BlockControl rightTop = this.blocks[start.i_pos.x + 1, start.i_pos.y - 1];
+
+            if ((leftBottom.color == start.color) && (start.color == rightTop.color))
+            {
+                leftBottom.toVanishing();
+                start.toVanishing();
+                rightTop.toVanishing();
+            }
+        }
+
         return (ret);
     }
 
