@@ -2,10 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
+
 public class BlockRoot : MonoBehaviour
 {
     public GameObject BlockPrefab = null; // 만들어낼 블록의 프리팹.
+    
     public BlockControl[,] blocks; // 그리드.
+
+    public GameObject queueBlockPrefeb = null;
+
+    public Queue<Block.COLOR> colorQueue;
+    public Queue<Block> blockQueue;
 
     private GameObject main_camera = null; // 메인 카메라.
     private BlockControl grabbed_block = null; // 잡은 블록.
@@ -56,6 +64,9 @@ public class BlockRoot : MonoBehaviour
         // 카메라로부터 마우스 커서를 통과하는 광선을 쏘기 위해서 필요
 
         this.score_counter = this.gameObject.GetComponent<ScoreCounter>();
+
+        colorQueue = new Queue<Block.COLOR>();
+        blockQueue = new Queue<Block>();
     }
     // 마우스 좌표와 겹치는지 체크한다.
     // 잡을 수 있는 상태의 블록을 잡는다.
@@ -243,7 +254,27 @@ public class BlockRoot : MonoBehaviour
             }
         } while (false);
         this.is_vanishing_prev = is_vanishing;
+
+
+
+
+
+        Debug.Log(colorQueue.Count);
+
+        createQueueBlock();
+
+
+
+
     }
+
+    public void createQueueBlock()
+    {
+        if(blockQueue.Count!=0)
+        GameObject go =  Instantiate(queueBlockPrefeb) as GameObject;
+        blockQueue
+    }
+
     // 블록을 만들어 내고 가로 9칸, 세로 9칸에 배치한다.
     public void initialSetUp()
     {
@@ -290,6 +321,10 @@ public class BlockRoot : MonoBehaviour
                 Random.Range(0, (int)Block.COLOR.NORMAL_COLOR_NUM);
             }
         }
+
+
+
+
     }
     // BlockRoot.cs: BlockRoot class
     // 지정된 그리드 좌표로 씬에서의 좌표를 구한다.
@@ -495,6 +530,10 @@ out Vector3 world_position, Vector3 mouse_position)
             {
                 // 나열된 같은 색 블록을 불붙은 상태로.
                 this.blocks[x, start.i_pos.y].toVanishing();
+                
+                    colorQueue.Enqueue(this.blocks[x, start.i_pos.y].color);
+                
+                
                 ret = true;
             }
         } while (false);
@@ -567,6 +606,12 @@ for (int y = uy + 1; y < Block.BLOCK_NUM_Y; y ++)
             for (int y = dy; y < uy + 1; y++)
             {
                 this.blocks[start.i_pos.x, y].toVanishing();
+
+                
+                    colorQueue.Enqueue(this.blocks[start.i_pos.x, y].color);
+                
+
+                //blockQueue.Enqueue(this.blocks[start.i_pos.x,y]);
                 ret = true;
             }
         } while (false);
@@ -592,9 +637,21 @@ for (int y = uy + 1; y < Block.BLOCK_NUM_Y; y ++)
         if ((leftTop.color == start.color) && (start.color == rightBottom.color))
         {
             leftTop.toVanishing();
-            start.toVanishing();
-            rightBottom.toVanishing();
-        }
+                
+                    colorQueue.Enqueue(leftTop.color);
+                
+                //blockQueue.Enqueue(leftTop);
+                start.toVanishing();
+                
+                    colorQueue.Enqueue(start.color);
+                
+                //blockQueue.Enqueue(start);
+                rightBottom.toVanishing();
+                
+                    colorQueue.Enqueue(rightBottom.color);
+                
+                //blockQueue.Enqueue(rightBottom);
+            }
      }
 
         if (start.vanish_timer < 0)
@@ -618,8 +675,20 @@ for (int y = uy + 1; y < Block.BLOCK_NUM_Y; y ++)
             if ((leftBottom.color == start.color) && (start.color == rightTop.color))
             {
                 leftBottom.toVanishing();
+                
+                    colorQueue.Enqueue(leftBottom.color);
+                
+                //blockQueue.Enqueue(leftBottom);
                 start.toVanishing();
+
+                colorQueue.Enqueue(start.color);
+                
+                // blockQueue.Enqueue(start);
                 rightTop.toVanishing();
+
+                colorQueue.Enqueue(rightTop.color);
+                
+                // blockQueue.Enqueue(rightTop);
             }
         }
 

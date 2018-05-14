@@ -37,9 +37,9 @@ public class Block
         DOWN, // 하.
         NUM, // 방향이 몇 종류 있는지 나타낸다(=4).
     };
-    public static int BLOCK_NUM_X = 15;
+    public static int BLOCK_NUM_X = 10;
     // 블록을 배치할 수 있는 X방향 최대수.
-    public static int BLOCK_NUM_Y = 15;
+    public static int BLOCK_NUM_Y = 10;
     // 블록을 배치할 수 있는 Y방향 최대수.
 
     public enum STEP
@@ -61,13 +61,7 @@ public class Block
 // 블록을 조작하는 클래스이다.
 public class BlockControl : MonoBehaviour
 {
-    public Material pink;
-    public Material blue;
-    public Material yellow;
-    public Material green;
-    public Material magenta;
-    public Material orange;
-    //public Material orange;
+   
 
     private struct StepFall
     { // Block class가 아님
@@ -444,33 +438,33 @@ public class BlockControl : MonoBehaviour
     {
         this.color = color; // 이번에 지정된 색을 멤버 변수에 보관한다.
         Color color_value; // Color 클래스는 색을 나타낸다.
-        Material mat = yellow;
+
         switch (this.color)
         { // 칠할 색에 따라서 갈라진다.
             default:
             case Block.COLOR.PINK:
                 color_value = new Color(1.0f, 0.5f, 0.5f);
-                mat = pink;
+               
                 break;
             case Block.COLOR.BLUE:
                 color_value = Color.blue;
-                mat = blue;
+             
                 break;
             case Block.COLOR.YELLOW:
                 color_value = Color.yellow;
-                mat = yellow;
+             
                 break;
             case Block.COLOR.GREEN:
                 color_value = Color.green;
-                mat = green;
+              
                 break;
             case Block.COLOR.MAGENTA:
                 color_value = Color.magenta;
-                mat = magenta;
+          
                 break;
             case Block.COLOR.ORANGE:
                 color_value = new Color(1.0f, 0.46f, 0.0f);
-                mat = orange;
+              
                 break;
         }
         // 이 게임 오브젝트의 머티리얼 색상을 변경한다.
