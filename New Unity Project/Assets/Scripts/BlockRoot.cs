@@ -2,7 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public class UnderBlock{
 
+   public UnderBlock(Block.COLOR color,GameObject instance)
+    {
+        
+        this.color = color;
+        this.instance = instance;
+    }
+    
+    public Block.COLOR color;
+    public GameObject instance;
+}
 
 public class BlockRoot : MonoBehaviour
 {
@@ -13,7 +24,7 @@ public class BlockRoot : MonoBehaviour
     public GameObject queueBlockPrefeb = null;
 
     public Queue<Block.COLOR> colorQueue;
-    public Queue<Block> blockQueue;
+    public Queue<UnderBlock> underBlockQueue;
 
     private GameObject main_camera = null; // 메인 카메라.
     private BlockControl grabbed_block = null; // 잡은 블록.
@@ -66,7 +77,7 @@ public class BlockRoot : MonoBehaviour
         this.score_counter = this.gameObject.GetComponent<ScoreCounter>();
 
         colorQueue = new Queue<Block.COLOR>();
-        blockQueue = new Queue<Block>();
+        underBlockQueue = new Queue<UnderBlock>();
     }
     // 마우스 좌표와 겹치는지 체크한다.
     // 잡을 수 있는 상태의 블록을 잡는다.
@@ -263,16 +274,74 @@ public class BlockRoot : MonoBehaviour
 
         createQueueBlock();
 
+        moveQueueBlock();
 
 
-
+    }
+    public void moveQueueBlock()
+    {
+        foreach (UnderBlock ub in underBlockQueue)
+        {
+             ub.instance.transform.position = new Vector3(ub.instance.transform.position.x+0.03f, ub.instance.transform.position.y, ub.instance.transform.position.z);
+            
+        }
     }
 
     public void createQueueBlock()
     {
-        if(blockQueue.Count!=0)
-        GameObject go =  Instantiate(queueBlockPrefeb) as GameObject;
-        blockQueue
+        GameObject go;
+        if(colorQueue.Count == 0)
+        {
+            return;
+        }
+        if (underBlockQueue.Count != 0)
+        {
+            
+            if (underBlockQueue.ToArray()[underBlockQueue.Count - 1].instance.transform.position.x < 1)
+            {
+                return;
+            }
+        }
+        
+        
+             go = Instantiate(queueBlockPrefeb) as GameObject;
+
+          Color color_value;
+        Block.COLOR color;
+        switch (color = colorQueue.Dequeue())
+        { // 칠할 색에 따라서 갈라진다.
+            default:
+            case Block.COLOR.PINK:
+                color_value = new Color(1.0f, 0.5f, 0.5f);
+
+                break;
+            case Block.COLOR.BLUE:
+                color_value = Color.blue;
+
+                break;
+            case Block.COLOR.YELLOW:
+                color_value = Color.yellow;
+
+                break;
+            case Block.COLOR.GREEN:
+                color_value = Color.green;
+
+                break;
+            case Block.COLOR.MAGENTA:
+                color_value = Color.magenta;
+
+                break;
+            case Block.COLOR.ORANGE:
+                color_value = new Color(1.0f, 0.46f, 0.0f);
+
+                break;
+        }
+
+        go.GetComponent<Renderer>().materials[0].color = color_value;
+
+        underBlockQueue.Enqueue(new UnderBlock(color, go));
+
+
     }
 
     // 블록을 만들어 내고 가로 9칸, 세로 9칸에 배치한다.
