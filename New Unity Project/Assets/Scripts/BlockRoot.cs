@@ -68,6 +68,50 @@ public class BlockRoot : MonoBehaviour
         color = (Block.COLOR)i; // i번째 색을 반환한다.
         return (color);
     }
+
+    public void BombEffect(Block.iPosition iPosition)
+    {
+        switch (Random.Range(1, 4))
+        {
+            case 1:
+                foreach (BlockControl block in blocks)
+                {
+                    if (block.i_pos.x == iPosition.x)
+                    {
+                        block.toVanishing();
+                        colorQueue.Enqueue(this.blocks[block.i_pos.x, block.i_pos.y].color);
+                    }
+                }
+                break;
+            case 2:
+                foreach (BlockControl block in blocks)
+                {
+                    if (block.i_pos.y == iPosition.y)
+                    {
+                        block.toVanishing();
+                        colorQueue.Enqueue(this.blocks[block.i_pos.x, block.i_pos.y].color);
+                    }
+                }
+                break;
+            case 3:
+                foreach (BlockControl block in blocks)
+                {
+                    if ((block.i_pos.y == iPosition.y)|| (block.i_pos.x == iPosition.x))
+                    {
+                        block.toVanishing();
+                        colorQueue.Enqueue(this.blocks[block.i_pos.x, block.i_pos.y].color);
+                    }
+                }
+                break;
+        }
+       
+
+    }
+
+
+
+
+
     void Start()
     {
         this.main_camera =
@@ -270,7 +314,7 @@ public class BlockRoot : MonoBehaviour
 
 
 
-        Debug.Log(colorQueue.Count);
+       
 
         createQueueBlock();
 
@@ -335,6 +379,9 @@ public class BlockRoot : MonoBehaviour
                 color_value = new Color(1.0f, 0.46f, 0.0f);
 
                 break;
+            case Block.COLOR.BLACK:
+                color_value = Color.black;
+                break;
         }
 
         go.GetComponent<Renderer>().materials[0].color = color_value;
@@ -365,7 +412,7 @@ public class BlockRoot : MonoBehaviour
                 BlockControl block =
                 game_object.GetComponent<BlockControl>();
                // game_object.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
-               // Debug.Log(game_object.transform.localScale);
+              
                 // 블록을 그리드에 저장한다.
                 this.blocks[x, y] = block;
                 // 블록의 위치 정보(그리드 좌표)를 설정한다.

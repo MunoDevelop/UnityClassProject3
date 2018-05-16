@@ -23,11 +23,14 @@ public class Block
         MAGENTA, // 마젠타.
         ORANGE, // 주황색.
         GRAY, // 그레이.
-        NUM, // 컬러가 몇 종류인지 나타낸다(=7).
+        BLACK, //Black Bomb
+        
+        NUM, // 컬러가 몇 종류인지 나타낸다(=8).
         FIRST = PINK, // 초기 컬러(분홍색).
         LAST = ORANGE, // 최종 컬러(주황색).
-        NORMAL_COLOR_NUM = GRAY, // 보통 컬러(회색 이외의 색)의 수.
+        NORMAL_COLOR_NUM = NUM, // 보통 컬러(회색 이외의 색)의 수.
     };
+    
     public enum DIR4
     { // 상하좌우 네 방향.
         NONE = -1, // 방향지정 없음.
@@ -61,7 +64,7 @@ public class Block
 // 블록을 조작하는 클래스이다.
 public class BlockControl : MonoBehaviour
 {
-   
+    
 
     private struct StepFall
     { // Block class가 아님
@@ -387,6 +390,11 @@ public class BlockControl : MonoBehaviour
 
     public void beginGrab() // 잡혔을 때 호출한다.
     {
+        if (color == Block.COLOR.BLACK)
+        {
+            block_root.BombEffect(this.i_pos);
+           
+        }
         this.next_step = Block.STEP.GRABBED;
     }
     public void endGrab() // 놓았을 때 호출한다.
@@ -464,7 +472,9 @@ public class BlockControl : MonoBehaviour
                 break;
             case Block.COLOR.ORANGE:
                 color_value = new Color(1.0f, 0.46f, 0.0f);
-              
+                break;
+            case Block.COLOR.BLACK:
+                color_value = Color.black;
                 break;
         }
         // 이 게임 오브젝트의 머티리얼 색상을 변경한다.

@@ -114,7 +114,10 @@ public class LevelControl  {
                     case 6:
                     level_data.heat_time =
                     float.Parse(word); break;
-            }
+                    case 7:
+                        level_data.probability[(int)Block.COLOR.BLACK] =
+                    float.Parse(word); break;
+                }
             n++;
         }
         if (n >= 7)
